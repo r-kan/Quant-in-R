@@ -4,8 +4,8 @@ simple financial applications &amp; analysis programs written in R language
 # R, as a programming language
 The R programming language is designed for statistical analysis, and is widely used in many area recently. Here, I will focus on one of the most adopted domain, financial analysis, to demonstrate the strength or R.  Besides, I shall pay extra attention to data visualizaiton in R.  
 
-# The SHY 'Sharpe Yield' strategy
-The introduced investment strategy, SHY 'Sharpe Yield', has a very simple computation model. It evaluates each stock by the SHY value, simply **yield** represents in a **sharpe ratio** way, i.e., its **mean** divided by its **standard deviation**. Given a list of concerned stocks, it computes the SHY value, and reports the stocks from highest to lowest SHY value.  
+# The SHY 'SHarpe Yield' strategy
+The introduced investment strategy, SHY 'SHarpe Yield', has a very simple computation model. It evaluates each stock by the SHY value, simply **yield** represents in a **sharpe ratio** way, i.e., its **mean** divided by its **standard deviation**. Given a list of concerned stocks, it computes the SHY value, and reports the stocks from highest to lowest SHY value.  
 
 Here, we already has 10 stocks in `csv/` directory, such that `shy.R` works as follows:  
 ```r
