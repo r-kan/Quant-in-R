@@ -31,7 +31,7 @@ Visualization is always a good idea for better comprehension:
 Then we have `yield.png` in working directory:
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/yield.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/yield.png" width="800" height="450"></a>
 
-We also can visualize the values in csv files as follows (`stock.png`):
+We also can visualize the values in csv files as follows (`stock.png` will be genereated):
 ```r
     dump_graph("2330", "close")
 ```
