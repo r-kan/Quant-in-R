@@ -15,7 +15,7 @@ dump_graph <- function(id, value_type="yield")
   csv_file = paste(c("csv/", id, ".csv"), collapse='')
   cared_data = get_cared_data(csv_file, c("yield", "date", "close", "volume"))
   
-  png(file=stock.png, width=width, height=height, res=res)
+  png(file="stock.png", width=width, height=height, res=res)
   par(mar=c(4,4,2,2)+0.1) # bottom, left, top, and right (default: 4.1)
   plot(cared_data[nrow(cared_data):1,value_type], 
        cex=point_ratio, type="o", col="red", xlab="date", 
