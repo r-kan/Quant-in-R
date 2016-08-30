@@ -1,6 +1,4 @@
-# A long term investment strategy: SHY (SHarpe Yield)
-#   input: a directory with stock csv files, e.g., 2330.csv
-#   output: the stock id list, from most to least suggested target
+# The long term investment strategy: SHY (SHarpe Yield)
 
 get_cared_data <- function(csv_file, column_names)
 {
@@ -8,8 +6,14 @@ get_cared_data <- function(csv_file, column_names)
 
   csv_data = read.csv(csv_file)
   column_values = csv_data[, column_names]
+  null_indexes = which(is.null(column_values), arr.ind=TRUE)
+  stopifnot(0 == null_indexes)
   na_indexes = which(is.na(column_values), arr.ind=TRUE)
-  stopifnot(0 == na_indexes)
+  if (length(na_indexes) > 0 & na_indexes[1] > 0) {
+    # Note: the folloiwng 'NA-eliminated' principle might not be valid for some value type...
+    print(paste("排除最後一個ＮＡ出現之前的日期", csv_data[, "date"][na_indexes[1]]))
+    return (column_values[1:na_indexes[1] - 1,])
+  }
 
   return (column_values) 
 }
@@ -41,9 +45,9 @@ get_pruned_data_by_yield <- function(data)
   return (data)
 }
 
-get_shy <- function(id)
+get_shy <- function(csv_file, data=list())
 {
-  cared_data = get_cared_data(id, c("yield", "date", "close", "volume"))
+  cared_data = if (0 == length(data)) get_cared_data(csv_file, c("yield", "date", "close", "volume")) else data
   pruned_data = get_pruned_data_by_yield(cared_data)
   if (!pass_criteria(pruned_data)) {
     return (-1)
@@ -57,15 +61,13 @@ get_shy <- function(id)
 
 dump <- function(row_values)
 {
-  id = paste("個股：", row_values[1])
-  shy = paste(", 夏普殖利率：", row_values[2])
-  print(paste(id, shy, sep=''))
+  print(paste(c("個股：", row_values[1], ", 夏普殖利率：", row_values[2]), collapse=''))
 }
 
-get_shy_suggestion <- function(csv_root = paste(getwd(), "/csv_dump/", sep=''))
+get_shy_suggestion <- function(csv_root = paste(getwd(), "/csv/", sep=''))
 {
-  csv_limit = 5
-  suggest_cnt = 3
+  csv_limit = 50
+  suggest_cnt = 5
   
   pattern = paste(c(csv_root, "*.csv"), collapse = '')
   csv_files <- Sys.glob(pattern)
@@ -83,8 +85,5 @@ get_shy_suggestion <- function(csv_root = paste(getwd(), "/csv_dump/", sep=''))
   print("推薦個股（依評比由高至低）如下：")
   apply(ordered_frame[1:report_cnt,], 1, dump)
 
-  return (ordered_frame)
+  return (as.vector(ordered_frame[, "id"]))
 }
-
-suggestion = get_shy_suggestion()
-
