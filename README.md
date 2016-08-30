@@ -7,7 +7,7 @@ The R programming language is designed for statistical analysis, and is widely u
 # The SHY 'SHarpe Yield' strategy
 The introduced investment strategy, SHY 'SHarpe Yield', has a very simple computation model. It evaluates each stock by the SHY value, simply **yield** represents in a **sharpe ratio** way, i.e., its **mean** divided by its **standard deviation**. Given a list of concerned stocks, it computes the SHY value, and reports the stocks from highest to lowest SHY value.  
 
-Here, we already has 10 stocks in `csv/` directory, such that `shy.R` works as follows:  
+Here, we already had 10 stocks in `csv/` directory, and `shy.R` works as follows:  
 ```r
     source("shy.R")
     shy_list = get_shy_suggestion()
