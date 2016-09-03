@@ -1,26 +1,63 @@
 # The long term investment strategy: SHY (SHarpe Yield)
 
-get_cared_data <- function(csv_file, column_names)
-{
-  print(paste("讀取", csv_file)) # default sep is ' '
+source("util.R")
+#DEBUG=1
 
-  csv_data = read.csv(csv_file)
+get_csv_data <- function(csv_file)
+{
+  dprint(paste("讀取", csv_file)) # default sep is ' '
+
+  # TODO: try variable declaration with possible higher readability 
+  #  (this will be an issue when num. of var is larger...)
+  # ref.: http://stackoverflow.com/questions/7519790/assign-multiple-new-variables-in-a-single-line-in-r
+  yield = 1 
+  date = 2
+  close = 3
+  volume = 4
+  column_names = c(vname(yield), vname(date), vname(close), vname(volume))  # TODO: remove order dependency
+  csv_data = read.csv(csv_file, na.strings=c("NA", "NULL"))
   column_values = csv_data[, column_names]
-  null_indexes = which(is.null(column_values), arr.ind=TRUE)
-  stopifnot(0 == null_indexes)
-  na_indexes = which(is.na(column_values), arr.ind=TRUE)
-  if (length(na_indexes) > 0 & na_indexes[1] > 0) {
-    # Note: the folloiwng 'NA-eliminated' principle might not be valid for some value type...
-    print(paste("排除最後一個ＮＡ出現之前的日期", csv_data[, "date"][na_indexes[1]]))
-    return (column_values[1:na_indexes[1] - 1,])
+  na_indexes = as.data.frame(which(is.na(column_values), arr.ind=TRUE))
+  na_indexes = na_indexes[order(na_indexes$row),]
+  start_na_yield_row = 1
+  if (nrow(na_indexes) > 0)
+  {
+    # Note: the folloiwng 'NA/NULL-eliminated' principle might not be valid for some value type...
+    for (i in 1:nrow(na_indexes))
+    {
+      if (yield == na_indexes$col[i]) {
+        start_na_yield_row = i
+        break
+      }
+      dprint(paste("移除未有交易資料的日期", csv_data[, "date"][na_indexes$row[i]]))
+    }
+    if (start_na_yield_row > 1) 
+    {  # remove the rows with non-yield NA value(s)
+      column_values <- column_values[-c(na_indexes$row[1:start_na_yield_row - 1]),]
+    }
+    dprint(paste("排除最後一個ＮＡ出現之前的日期", csv_data[, "date"][na_indexes$row[start_na_yield_row]]))
+    return (column_values[1:(na_indexes$row[start_na_yield_row] - start_na_yield_row),])
   }
 
   return (column_values) 
 }
 
-# TODO: support customized filtering rule using 'date, 'close', and 'volume'
 pass_criteria <- function(data)
 {
+  if (is.null(data)) { return (FALSE) }
+  
+  required_existed_day_count = 750  # 250 days * 3 => 1 year * 3
+  if (nrow(data) < required_existed_day_count) {
+    dprint("個股上市櫃未滿三年，不予考慮")
+    return (FALSE)
+  }
+  
+  required_volume_mean = -1  # Note: the volume unit of csv raw data is 1,000,000 NTD
+  if (-1 != required_volume_mean & mean(data$volume) < required_volume_mean) {
+    dprint(paste("個股平均成交量未達標準，不予考慮：", mean(data$volume)))
+    return (FALSE)
+  }
+  
   return (TRUE)
 }
 
@@ -30,16 +67,28 @@ get_pruned_data_by_yield <- function(data)
   yields = data[, "yield"]
   
   start_positive_index = -1
+  if (0 == length(yields) | is.na(yields[1])) {
+    dprint("個股無最近日期資料")
+    return (NULL)
+  }
+  
+  start_positive_index = -1
   for (i in length(yields):1)
   {
     if (yields[i] > 0) {
       start_positive_index = i
       if (start_positive_index != length(yields)) {
-        print(paste("只考慮正殖利率開始的日期", data[, "date"][start_positive_index]))
+        dprint(paste("只考慮正殖利率開始的日期", data[, "date"][start_positive_index]))
         return (data[1:start_positive_index,])  # rows: 1-start_positive_index, columns: keep all
       }
       break
     }
+  }
+  
+  if (-1 == start_positive_index)
+  {
+    dprint("個股無正殖利率資料")
+    return (NULL)
   }
   
   return (data)
@@ -47,14 +96,16 @@ get_pruned_data_by_yield <- function(data)
 
 get_shy <- function(csv_file, data=list())
 {
-  cared_data = if (0 == length(data)) get_cared_data(csv_file, c("yield", "date", "close", "volume")) else data
-  pruned_data = get_pruned_data_by_yield(cared_data)
+  csv_data = if (0 == length(data)) get_csv_data(csv_file) else data
+  pruned_data = get_pruned_data_by_yield(csv_data)
   if (!pass_criteria(pruned_data)) {
-    return (-1)
+    return (NA)
   }
 
   yields = pruned_data[, "yield"]
-  shy = mean(yields) / sd(yields)
+  # we don't expect a higher shy value caused by a yield-sd lower than 1
+  adopted_sd = if (sd(yields) > 1) sd(yields) else 1
+  shy = mean(yields) / adopted_sd
 
   return (shy)
 }
@@ -66,12 +117,12 @@ dump <- function(row_values)
 
 get_shy_suggestion <- function(csv_root = paste(getwd(), "/csv/", sep=''))
 {
-  csv_limit = 50
-  suggest_cnt = 5
+  csv_limit = -1  # -1 means no limit
+  suggest_cnt = 30
   
   pattern = paste(c(csv_root, "*.csv"), collapse = '')
   csv_files <- Sys.glob(pattern)
-  csv_cnt = if (length(csv_files) > csv_limit) csv_limit else length(csv_files)
+  csv_cnt = if (-1 != csv_limit & length(csv_files) > csv_limit) csv_limit else length(csv_files)
   id_list <- gsub(".csv", "", gsub(csv_root, "", csv_files))[1:csv_cnt]
   shy_list <- double(csv_cnt)
   for (i in 1:csv_cnt) {

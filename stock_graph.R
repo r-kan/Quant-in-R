@@ -1,9 +1,11 @@
 # Create graph file for stock values
 
-if (!exists("get_cared_data", mode="function"))
+source("util.R")
+
+if (!exists("get_csv_data", mode="function"))
   source("shy.R")
 
-stopifnot(exists("get_cared_data", mode="function"))
+stopifnot(exists("get_csv_data", mode="function"))
 
 width = 800
 height = 450
@@ -13,11 +15,11 @@ point_ratio = .1
 dump_graph <- function(id, value_type="yield")
 {
   csv_file = paste(c("csv/", id, ".csv"), collapse='')
-  cared_data = get_cared_data(csv_file, c("yield", "date", "close", "volume"))
+  csv_data = get_csv_data(csv_file)
   
   png(file="stock.png", width=width, height=height, res=res)
   par(mar=c(4,4,2,2)+0.1) # bottom, left, top, and right (default: 4.1)
-  plot(cared_data[nrow(cared_data):1,value_type], 
+  plot(csv_data[nrow(csv_data):1,value_type], 
        cex=point_ratio, type="o", col="red", xlab="date", 
        ylab=value_type, main=paste(id, "chart"))
   
@@ -38,41 +40,40 @@ dump_multi_graph_on_yield <- function(id_list)
   png(file="yield.png", width=width, height=height, res=res)
   par(mar=c(4,4,2,2)+0.1) # bottom, left, top, and right (default: 4.1)
 
-  value_type = "yield"
+  YIELD = "yield"
   max_date_cnt = 0
   max_yield = 0
-  max_yield_idx = 0
+  min_yield = MAX_YIELD_BOUND
   data_list = list()
   shy_list = double(length(input_cnt))
   
   for (i in 1:input_cnt) 
   {
     csv_file = paste(c("csv/", id_list[i], ".csv"), collapse='')
-    cared_data = get_cared_data(csv_file, c("yield", "date", "close", "volume"))
-    shy_list[i] = get_shy(csv_file, cared_data)
-    if (nrow(cared_data) > max_date_cnt) {
-      max_date_cnt = nrow(cared_data)
+    csv_data = get_csv_data(csv_file)
+    max_date_cnt = max(nrow(csv_data), max_date_cnt)
+    max_yield = max(max(csv_data[, YIELD], na.rm=TRUE), max_yield)
+    this_min_yield = min(csv_data[, YIELD], na.rm=TRUE)
+    if (0 != this_min_yield) {
+      min_yield = min(this_min_yield, min_yield)
     }
-    this_max_yield = max(cared_data[, value_type], na.rm=TRUE)
-    if (this_max_yield > max_yield) {
-      max_yield = this_max_yield
-      max_yield_idx = i
-    }
-    data_list[[i]] = cared_data
+    
+    shy_list[i] = get_shy(csv_file, csv_data)
+    data_list[[i]] = csv_data
   }
 
   color_list = c("red", "blue", "green")
   par(family='STKaiti') # to support Chinese characters
-  plot(data_list[[max_yield_idx]][max_date_cnt:1, value_type], 
-       xlab="date", ylab=value_type, 
-       main=paste(value_type, if (1 == length(id_list)) "chart" else "comparison"),
-       cex=point_ratio, type="o", col=color_list[max_yield_idx])
+  plot(data_list[[1]][max_date_cnt:1, YIELD], 
+       xlab="date", ylab=YIELD, 
+       ylim=c(min_yield, max_yield),
+       main=paste(YIELD, if (1 == length(id_list)) "chart" else "comparison"),
+       cex=point_ratio, type="o", col=color_list[1])
 
   axis(side=2, at=c(0:max_yield)) # TODO: also show date as x-axis label in a readable way
   
-  for (i in 1:input_cnt) {
-    if (i == max_yield_idx) { next }
-    lines(data_list[[i]][max_date_cnt:1, value_type], 
+  for (i in 2:input_cnt) {
+    lines(data_list[[i]][max_date_cnt:1, YIELD], 
           cex=point_ratio, type="o", col=color_list[i])
   }
   
