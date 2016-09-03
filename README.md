@@ -15,11 +15,12 @@ Here, we have 10 stocks in `csv/` directory, and `shy.R` works as follows:
 
 Then, it shows
 ```
-[1] "個股：2408, 夏普殖利率：3.659004"
+[1] "推薦個股（依評比由高至低）如下："
 [1] "個股：2382, 夏普殖利率：3.466853"
 [1] "個股：2912, 夏普殖利率：3.451974"
 [1] "個股：2357, 夏普殖利率：2.663984"
 [1] "個股：2207, 夏普殖利率：2.491292"
+[1] "個股：2330, 夏普殖利率：2.470229"
 ```
 
 Visualization is always a good idea for better comprehension:
