@@ -1,6 +1,8 @@
 # Common utility functions
 
-DEBUG = 0
+if (!exists("DEBUG", mode="numeric"))
+  DEBUG = 0
+
 MAX_YIELD_BOUND = 99999
 CSV_HOME = "csv/"
 
