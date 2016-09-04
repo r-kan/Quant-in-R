@@ -110,16 +110,42 @@ get_shy <- function(csv_file, data=list())
   return (shy)
 }
 
-dump <- function(row_values)
+get_csv_file <- function(id)
 {
-  print(paste(c("個股：", row_values[1], ", 夏普殖利率：", row_values[2]), collapse=''))
+  return (paste(c(getwd(), '/', CSV_HOME, id, ".csv"), collapse=''))
 }
 
-get_shy_suggestion <- function(csv_root = paste(getwd(), "/csv/", sep=''))
+# Note: it is not a good name for 'other_stock_values', however, shall be acceptable if we only use
+#       it to retrieve two other values (when more than three values, then better refactor it)
+get_other_stock_values <- function(id)
+{
+  csv_file = get_csv_file(id)
+  csv_data = get_csv_data(csv_file)
+  pruned_data = get_pruned_data_by_yield(csv_data)
+  
+  valid_yield_cnt = nrow(pruned_data)
+  current_close = pruned_data[1, "close"]
+  return (c(valid_yield_cnt, current_close))
+}
+
+dump <- function(row_values, more_info)
+{
+  id = row_values[1]
+  stock_values = get_other_stock_values(id)
+  dump_str = c("個股：", id, ", 夏普殖利率：", row_values[2])
+  if (more_info) {
+    more_dump_str = c(", 天數：", stock_values[1], ", 收盤價：", stock_values[2])
+    dump_str = c(dump_str, more_dump_str)
+  }
+  print(paste(dump_str, collapse=''))
+}
+
+get_shy_suggestion <- function(more_info=FALSE)
 {
   csv_limit = -1  # -1 means no limit
   suggest_cnt = 30
   
+  csv_root = paste(getwd(), '/', CSV_HOME, sep='')
   pattern = paste(c(csv_root, "*.csv"), collapse = '')
   csv_files <- Sys.glob(pattern)
   csv_cnt = if (-1 != csv_limit & length(csv_files) > csv_limit) csv_limit else length(csv_files)
@@ -134,7 +160,7 @@ get_shy_suggestion <- function(csv_root = paste(getwd(), "/csv/", sep=''))
   
   report_cnt = if (csv_cnt > suggest_cnt) suggest_cnt else csv_cnt
   print("推薦個股（依評比由高至低）如下：")
-  apply(ordered_frame[1:report_cnt,], 1, dump)
+  apply(ordered_frame[1:report_cnt,], 1, dump, more_info=more_info)
 
   return (as.vector(ordered_frame[, "id"]))
 }

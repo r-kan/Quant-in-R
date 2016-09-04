@@ -14,7 +14,7 @@ point_ratio = .1
 
 dump_graph <- function(id, value_type="yield")
 {
-  csv_file = paste(c("csv/", id, ".csv"), collapse='')
+  csv_file = paste(c(CSV_HOME, id, ".csv"), collapse='')
   csv_data = get_csv_data(csv_file)
   
   png(file="stock.png", width=width, height=height, res=res)
@@ -49,7 +49,7 @@ dump_multi_graph_on_yield <- function(id_list)
   
   for (i in 1:input_cnt) 
   {
-    csv_file = paste(c("csv/", id_list[i], ".csv"), collapse='')
+    csv_file = paste(c(CSV_HOME, id_list[i], ".csv"), collapse='')
     csv_data = get_csv_data(csv_file)
     max_date_cnt = max(nrow(csv_data), max_date_cnt)
     max_yield = max(max(csv_data[, YIELD], na.rm=TRUE), max_yield)

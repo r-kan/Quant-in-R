@@ -2,6 +2,7 @@
 
 DEBUG = 0
 MAX_YIELD_BOUND = 99999
+CSV_HOME = "csv/"
 
 dprint <- function(msg)
 {
