@@ -42,6 +42,10 @@ We also can visualize the values in csv files as follows (`stock.png` will be ge
 
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/stock.png" target="_blank"><img border="0" alt="close values of 2330" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/stock.png" width="800" height="450"></a>
 
+# How good (or bad) is SHY? 
+Would you like to believe a strategy is good when someone throws it to you and claims that it is good? I hope not.  
+Next, I would like to present R programs to show the quality of SHY, basically, in terms of returns on investment. The result will also be compared with one of the most popular long-term investment target, 0050 etf.  I believe that way using R, think and evaluate our financial decisions before applying them, will give us invaluable feedback.
+
 # More advanced R programs
 Next, I will present programs utilize more advaned R features on the following:  
 * Probability Distributions
