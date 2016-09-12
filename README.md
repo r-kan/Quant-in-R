@@ -47,7 +47,7 @@ Would you like to believe a strategy is good when someone throws it to you and c
 Next, I would like to present R programs to show the quality of SHY, basically, in terms of returns on investment. The result will also be compared with one of the most popular long-term investment target, 0050 etf.  I believe that way using R, think and evaluate our financial decisions before applying them, will give us invaluable feedback.
 
 # More advanced R programs
-Next, I will present programs utilize more advaned R features on the following:  
+For future plan, I will present programs utilize more advaned R features on the following:  
 * Probability Distributions
 * Linear Least Square Regression
 * Confidence Intervals
