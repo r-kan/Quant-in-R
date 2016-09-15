@@ -48,7 +48,7 @@ pass_criteria <- function(data)
   
   required_existed_day_count = 750  # 250 days * 3 => 1 year * 3
   if (nrow(data) < required_existed_day_count) {
-    dprint("個股上市櫃未滿三年，不予考慮")
+    dprint("個股連續開市期間未滿三年，不予考慮")
     return (FALSE)
   }
   
