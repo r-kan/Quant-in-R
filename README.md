@@ -1,5 +1,6 @@
 # Quant-in-R
-simple financial applications &amp; analysis programs written in R language  
+simple financial applications &amp; analysis programs written in R language   
+  
 2016/10/10: A draft version of <a href='https://rkan.shinyapps.io/SHY_draft/'>SHY web interface</a> is presented
 
 # R, as a programming language
