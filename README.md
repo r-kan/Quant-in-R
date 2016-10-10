@@ -26,8 +26,6 @@ Note: 'DEBUG=1' to show more message during computation
 
 # Visualize the data
 
-For web interface visualization, check <a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a> (powered by <a href='https://github.com/rstudio/shiny'>Shiny</a>).  
-
 Visualization is always a good idea for better comprehension:
 ```r
     source("stock_graph.R")
@@ -43,6 +41,8 @@ We also can visualize the values in csv files as follows (`stock.png` will be ge
 ```
 
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/stock.png" target="_blank"><img border="0" alt="close values of 2330" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/stock.png" width="800" height="450"></a>
+
+For web interface visualization, check <a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a> (powered by <a href='https://github.com/rstudio/shiny'>Shiny</a>).  
 
 # How good (or bad) is SHY? 
 Would you like to believe a strategy is good when someone throws it to you and claims that it is good? I hope not.  
