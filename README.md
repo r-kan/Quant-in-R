@@ -1,5 +1,6 @@
 # Quant-in-R
-simple financial applications &amp; analysis programs written in R language
+simple financial applications &amp; analysis programs written in R language  
+2016/10/10: A draft version of <a href='https://rkan.shinyapps.io/SHY_draft/'>SHY web interface</a> is presented
 
 # R, as a programming language
 The R programming language is designed for statistical analysis, and is widely used in many area recently. Here, I will focus on one of the most adopting domain, financial analysis, to demonstrate the strength of R.  Besides, I shall pay extra attention to data visualizaiton in R.  
