@@ -48,8 +48,8 @@ We also can visualize the values in csv files as follows (`stock.png` will be ge
 Would you like to believe a strategy is good when someone throws it to you and claims that it is good? I hope not.  
 Next, I would like to present R programs to show the quality of SHY, basically in terms of returns on investment. The result will also be compared with one of the most popular long-term investment target in Taiwan stock market, the 0050 ETF. I believe in this way using R, to think and evaluate financial decisions before adopting them, gives invaluable benefit.  
 
-# More advanced R programs
-For future plan, I will present programs utilize more advaned R features on the following:  
+# More R programs
+For future plan, I will present programs utilize some other R features:  
 * Probability Distributions
 * Linear Least Square Regression
 * Confidence Intervals
