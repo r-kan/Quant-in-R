@@ -26,6 +26,8 @@ Note: 'DEBUG=1' to show more message during computation
 
 # Visualize the data
 
+For web interface visualization, check <a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a> (powered by <a href='https://github.com/rstudio/shiny'>Shiny</a>).  
+
 Visualization is always a good idea for better comprehension:
 ```r
     source("stock_graph.R")
