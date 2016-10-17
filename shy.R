@@ -1,5 +1,6 @@
 # The long term investment strategy: SHY (SHarpe Yield)
 
+source("value_type.R")
 source("util.R")
 #DEBUG=1
 
@@ -7,13 +8,6 @@ get_csv_data <- function(csv_file)
 {
   dprint(paste("讀取", csv_file)) # default sep is ' '
 
-  # TODO: try variable declaration with possible higher readability 
-  #  (this will be an issue when num. of var is larger...)
-  # ref.: http://stackoverflow.com/questions/7519790/assign-multiple-new-variables-in-a-single-line-in-r
-  yield = 1 
-  date = 2
-  close = 3
-  volume = 4
   column_names = c(vname(yield), vname(date), vname(close), vname(volume))  # TODO: remove order dependency
   csv_data = read.csv(csv_file, na.strings=c("NA", "NULL"))
   column_values = csv_data[, column_names]
