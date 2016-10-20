@@ -28,9 +28,10 @@ get_csv_data <- function(csv_file)
     if (start_na_yield_row > 1) 
     {  # remove the rows with non-yield NA value(s)
       column_values <- column_values[-c(na_indexes$row[1:start_na_yield_row - 1]),]
+      dprint(paste("排除最後一個ＮＡ出現之前的日期", csv_data[, "date"][na_indexes$row[start_na_yield_row]]))
+      return (column_values[1:(na_indexes$row[start_na_yield_row] - start_na_yield_row),])
     }
-    dprint(paste("排除最後一個ＮＡ出現之前的日期", csv_data[, "date"][na_indexes$row[start_na_yield_row]]))
-    return (column_values[1:(na_indexes$row[start_na_yield_row] - start_na_yield_row),])
+    return (column_values[-c(na_indexes$row),])
   }
 
   return (column_values) 
@@ -59,30 +60,24 @@ pass_criteria <- function(data)
 get_pruned_data_by_yield <- function(data)
 {
   yields = data[, "yield"]
-  
-  start_positive_index = -1
+
   if (0 == length(yields) | is.na(yields[1])) {
     dprint("個股無最近日期資料")
     return (NULL)
   }
   
-  start_positive_index = -1
-  for (i in length(yields):1)
+  start_negative_index = -1
+  for (i in 1:length(yields))
   {
-    if (yields[i] > 0) {
-      start_positive_index = i
-      if (start_positive_index != length(yields)) {
-        dprint(paste("只考慮正殖利率開始的日期", data[, "date"][start_positive_index]))
-        return (data[1:start_positive_index,])  # rows: 1-start_positive_index, columns: keep all
+    if (yields[i] <= 0) {
+      if (0 == i) {
+        dprint("個股最近無正殖利率")
+        return (NULL)
       }
-      break
+      start_negative_index = i
+      dprint(paste("只考慮從上一次正殖利率開始的日期", data[, "date"][start_negative_index - 1]))
+      return (data[1:start_negative_index - 1,])  # rows: start_negative_index - 1, columns: keep all
     }
-  }
-  
-  if (-1 == start_positive_index)
-  {
-    dprint("個股無正殖利率資料")
-    return (NULL)
   }
   
   return (data)
