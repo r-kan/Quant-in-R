@@ -55,10 +55,9 @@ show_multi_graph_on_yield <- function(id_list)
     csv_data = get_csv_data(csv_file)
     max_date_cnt = max(nrow(csv_data), max_date_cnt)
     max_yield = max(max(csv_data[, YIELD], na.rm=TRUE), max_yield)
-    this_min_yield = min(csv_data[, YIELD], na.rm=TRUE)
-    if (0 != this_min_yield) {
-      min_yield = min(this_min_yield, min_yield)
-    }
+    positive_indexes = csv_data[, YIELD] > 0
+    this_min_yield = min(csv_data[, YIELD][positive_indexes], na.rm=TRUE)
+    min_yield = min(this_min_yield, min_yield)
 
     shy_list[i] = get_shy(csv_file, csv_data)
     data_list[[i]] = csv_data
