@@ -2,29 +2,23 @@
 
 source("util.R")
 
-if (!exists("get_csv_data", mode="function"))
-  source("shy.R")
+WIDTH = 800
+HEIGHT = 450
+RES = 100
+POINT_SIZE = .1
 
-stopifnot(exists("get_csv_data", mode="function"))
-
-width = 800
-height = 450
-res = 100
-point_ratio = .1
-
-show_graph <- function(id, value_type="yield")
+show_graph <- function(id, value_type=YIELD)
 {
-  csv_file = paste(c(CSV_HOME, id, ".csv"), collapse='')
-  csv_data = get_csv_data(csv_file)
+  csv_data = get_csv_data(get_csv_file(id))
 
   par(mar=c(4,4,2,2)+0.1) # bottom, left, top, and right (default: 4.1)
-  plot(csv_data[nrow(csv_data):1,value_type], cex=point_ratio, type="o", col="red", xlab="date",
+  plot(csv_data[nrow(csv_data):1,value_type], cex=POINT_SIZE, type="o", col="red", xlab=DATE,
     ylab=value_type, main=paste(value_type, "chart"))
 }
 
-dump_graph <- function(id, value_type="yield")
+dump_graph <- function(id, value_type=YIELD)
 {
-  png(file="stock.png", width=width, height=height, res=res)
+  png(file="stock.png", width=WIDTH, height=HEIGHT, res=RES)
   show_graph(id, value_type)
   dev.off() 
 }
@@ -37,12 +31,11 @@ show_multi_graph_on_yield <- function(id_list)
   max_cnt = 3
   if (input_cnt > max_cnt) {
     input_cnt = max_cnt
-    print(paste(c("最多支援的個股數為", max_cnt, ", 其餘的個股將不予處理"), collapse=''))
+    print(paste0("最多支援的個股數為", max_cnt, ", 其餘的個股將不予處理"))
   }
 
   par(mar=c(4,4,2,2)+0.1) # bottom, left, top, and right (default: 4.1)
 
-  YIELD = "yield"
   max_date_cnt = 0
   max_yield = 0
   min_yield = MAX_YIELD_BOUND
@@ -51,12 +44,11 @@ show_multi_graph_on_yield <- function(id_list)
 
   for (i in 1:input_cnt)
   {
-    csv_file = paste(c(CSV_HOME, id_list[i], ".csv"), collapse='')
-    csv_data = get_csv_data(csv_file)
+    csv_data = get_csv_data(get_csv_file(id_list[i]))
     max_date_cnt = max(nrow(csv_data), max_date_cnt)
     max_yield = max(max(csv_data[, YIELD], na.rm=TRUE), max_yield)
-    positive_indexes = csv_data[, YIELD] > 0
-    this_min_yield = min(csv_data[, YIELD][positive_indexes], na.rm=TRUE)
+    positive_indices = csv_data[, YIELD] > 0
+    this_min_yield = min(csv_data[, YIELD][positive_indices], na.rm=TRUE)
     min_yield = min(this_min_yield, min_yield)
 
     shy_list[i] = get_shy(csv_file, csv_data)
@@ -66,16 +58,16 @@ show_multi_graph_on_yield <- function(id_list)
   color_list = c("red", "blue", "green")
   par(family='STKaiti') # to support Chinese characters
   plot(data_list[[1]][max_date_cnt:1, YIELD],
-       xlab="date", ylab=YIELD,
+       xlab=DATE, ylab=YIELD,
        ylim=c(min_yield, max_yield),
        main=paste(YIELD, if (1 == length(id_list)) "chart" else "comparison"),
-       cex=point_ratio, type="o", col=color_list[1])
+       cex=POINT_SIZE, type="o", col=color_list[1])
 
   axis(side=2, at=c(0:max_yield)) # TODO: also show date as x-axis label in a readable way
 
   for (i in 2:input_cnt) {
     lines(data_list[[i]][max_date_cnt:1, YIELD],
-          cex=point_ratio, type="o", col=color_list[i])
+          cex=POINT_SIZE, type="o", col=color_list[i])
   }
 
   legend_list = character(length(input_cnt))
@@ -92,9 +84,9 @@ show_multi_graph_on_yield <- function(id_list)
          bg="grey96")
 }
 
-dump_multi_graph_on_yield <- function(id_list)
+dump_multi_graph_on_yield <- function(shy_res_list)
 {
-  png(file="yield.png", width=width, height=height, res=res)
-  show_multi_graph_on_yield(id_list)
+  png(file="yield.png", width=WIDTH, height=HEIGHT, res=RES)
+  show_multi_graph_on_yield(as.vector(shy_res_list$id))
   dev.off() 
 }

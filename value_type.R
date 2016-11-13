@@ -1,13 +1,24 @@
+# Utility functons and definitions of stock value type
 
-source("util.R")
+# inspired by the following (somehow, their methods do not work for my usage)
+# http://stackoverflow.com/questions/24309910/how-to-get-name-of-variable-in-r-substitute
+vname <- function(var)  # return string name of var, e.g., vname("foo") = "foo"
+{
+  return (deparse(substitute(var)))
+}
 
-# TODO: try variable declaration with possible higher readability
-#  (this will be an issue when num. of var is larger...)
+# Shall we try variable declaration with possible higher readability?
+#  (this may be an issue when num. of var is larger...)
 # ref.: http://stackoverflow.com/questions/7519790/assign-multiple-new-variables-in-a-single-line-in-r
 yield = 1
 date = 2
 close = 3
 volume = 4
+
+YIELD = vname(yield)
+DATE = vname(date)
+CLOSE = vname(close)
+VOLUME = vname(volume)
 
 get_name <- function(value_type)
 {
