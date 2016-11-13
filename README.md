@@ -18,11 +18,16 @@ Here, we have 10 stocks in the folder `csv/`, and `shy.R` works as follows:
 Then, it shows
 ```
 [1] "推薦個股（依評比由高至低）如下："
-[1] "個股：2382, 夏普殖利率：3.466853"
-[1] "個股：2912, 夏普殖利率：3.451974"
-[1] "個股：2801, 夏普殖利率：3.217884"
-[1] "個股：1101, 夏普殖利率：3.049088"
-[1] "個股：2207, 夏普殖利率：2.491292"
+[1] "( 1) 個股：2382, 夏普殖利率：3.466853"
+[1] "( 2) 個股：2912, 夏普殖利率：3.451974"
+[1] "( 3) 個股：2801, 夏普殖利率：3.217884"
+[1] "( 4) 個股：1101, 夏普殖利率：3.049088"
+[1] "( 5) 個股：2207, 夏普殖利率：2.491292"
+[1] "( 6) 個股：2330, 夏普殖利率：2.470229"
+[1] "( 7) 個股：2325, 夏普殖利率：2.329518"
+[1] "( 8) 個股：2357, 夏普殖利率：2.072297"
+[1] "( 9) 個股：2354, 夏普殖利率：1.779792"
+[1] "(10) 個股：2408, 夏普殖利率：NA"
 ```
 Note: 'DEBUG=1' to show more message during computation  
 
@@ -48,7 +53,7 @@ For web interface visualization, check <a href='https://rkan.shinyapps.io/SHY_dr
 
 # How good (or bad) is SHY? 
 Would you like to believe a strategy is good when someone throws it to you and claims that it is good? I hope not.  
-Next, I would like to present R programs to show the quality of SHY, basically in terms of returns on investment. The result will also be compared with one of the most popular long-term investment target in Taiwan stock market, the 0050 ETF. I believe in this way using R, to think and evaluate financial decisions before adopting them, gives invaluable benefit.  
+Next, I would like to present R programs, adopting `quatmod` and `PerformanceAnalytics` to show the quality of SHY, basically in terms of returns on investment. The result will also be compared with one of the most popular long-term investment target in Taiwan stock market, the 0050 ETF. I believe in this way using R, to think and evaluate financial decisions before adopting them, gives invaluable benefit.  
 
 # More R programs
 For future plan, I will present programs utilize some other R features:  
