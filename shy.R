@@ -82,7 +82,7 @@ dump <- function(row_values, more_info)
 {
   idx = row_values[1]
   id = row_values[2]
-  dump_str = c("(", idx, ") 個股：", id, ", 夏普殖利率：", row_values[3])
+  dump_str = c("(", idx, ") 個股：", id, ", ＳＨＹ：", row_values[3])
   if (more_info) {
     stock_values = get_other_stock_values(id)
     more_dump_str = c(", 天數：", stock_values[1], ", 收盤價：", stock_values[2])
