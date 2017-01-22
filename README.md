@@ -1,8 +1,7 @@
 # Quant-in-R
 simple financial applications &amp; analysis programs written in R language   
   
-<a href='http://url_to_be_announced'>ＳＨＹ: The 'Sharpe Yield' Strategy</a>  
-<a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft: Simple demonstration for data visualization</a>
+<a href='http://url_to_be_announced'>ＳＨＹ: The 'Sharpe Yield' Strategy</a>
 
 # R, as a programming language
 The R programming language is designed for statistical analysis, and is widely used in many area recently. Here, I will focus on one of the most adopting domain, financial analysis, to demonstrate the strength of R.  Besides, I shall pay extra attention to data visualizaiton in R.  
@@ -48,11 +47,22 @@ In case that the mutual performance between two targets is interested, we can pu
 ```
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_2330_perf.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_2330_perf.png" width="515" height="411"></a>
 
+
 Another way to compare performance is to use a relative performance view:
 ```r
     eval_rel_res = evaluate_shy_stock_relative('2330')
 ```
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_2330_perf_rel.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_2330_perf_rel.png" width="515" height="411"></a>
+
+If some stocks, instead of SHY are interested, we can do the following:
+```r
+    source('stock_eval.R')
+    evaluate_stock('2330')
+    evaluate_stock_pair('2330', '2357')
+    evaluate_stock_pair_relative('2330', '2357')
+```
+
+Don't forget to try above to see how the outcome will be. :)
 
 Note: 'DEBUG=1' to show more message during computation  
 
