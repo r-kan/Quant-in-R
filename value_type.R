@@ -14,11 +14,13 @@ yield = 1
 date = 2
 close = 3
 volume = 4
+adjclose = 5
 
 YIELD = vname(yield)
 DATE = vname(date)
 CLOSE = vname(close)
 VOLUME = vname(volume)
+ADJCLOSE = vname(adjclose)
 
 get_name <- function(value_type)
 {
@@ -26,7 +28,8 @@ get_name <- function(value_type)
     yield = "殖利率",
     date = "日期",
     close = "收盤價",
-    volume = "成交量")
+    volume = "成交量",
+    adjclose = "還原權值價格")
 }
 
 get_value_name <- function(name)
@@ -42,6 +45,9 @@ get_value_name <- function(name)
   }
   if (name == "成交量") {
     return (vname(volume))
+  }
+  if (name == "還原權值價格") {
+    return (vname(adjclose))
   }
   stopifnot(FALSE)
 }

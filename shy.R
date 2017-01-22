@@ -1,6 +1,10 @@
 # The SHY (SHarpe Yield) strategy for long term investment
 
-source("util.R")
+require(ggplot2)
+
+if (!exists('UTIL_R')) {
+  source('util.R')
+}
 
 pass_criteria <- function(data)
 {
@@ -24,6 +28,11 @@ pass_criteria <- function(data)
 # prune the input data to only keep values with date from 1st positive yield
 get_pruned_data_by_yield <- function(data)
 {
+  if (class(data) != 'data.frame') {
+    stopifnot(is.na(data))
+    return (NULL)
+  }
+
   yields = data[, YIELD]
 
   if (0 == length(yields) | is.na(yields[1])) {
@@ -49,19 +58,27 @@ get_pruned_data_by_yield <- function(data)
   return (data)
 }
 
-get_shy <- function(csv_file, data=list())
+get_yields <- function(csv_file, cared_date=NA, data=data.frame())
 {
-  csv_data = if (0 == length(data)) get_csv_data(csv_file) else data
+  stopifnot(class(data) == 'data.frame')
+  csv_data = if (0 == length(data)) get_csv_data(csv_file, cared_date) else data
   pruned_data = get_pruned_data_by_yield(csv_data)
   if (FALSE == pass_criteria(pruned_data)) {
     return (NA)
   }
+  return (pruned_data[, YIELD])
+}
 
-  yields = pruned_data[, YIELD]
+get_shy <- function(csv_file, cared_date=NA, data=data.frame())
+{
+  yields = get_yields(csv_file, cared_date, data)
+  if ('logical' == class(yields)) {
+    stopifnot(is.na(yields))
+    return (NA)
+  }
   # we don't expect a higher shy value caused by a yield-sd lower than 1
   adopted_sd = if (sd(yields) > 1) sd(yields) else 1
   shy = mean(yields) / adopted_sd
-
   return (shy)
 }
 
@@ -91,7 +108,7 @@ dump <- function(row_values, more_info)
   print(paste(dump_str, collapse=''))
 }
 
-get_shy_suggestion <- function(more_info=FALSE)
+get_shy_suggestion <- function(cared_date=NA, more_info=FALSE, silence=FALSE)
 {
   COMPUTE_LIMIT = -1  # -1 means no limit
   
@@ -100,7 +117,7 @@ get_shy_suggestion <- function(more_info=FALSE)
   csv_cnt = if (-1 != COMPUTE_LIMIT & length(csv_files) > COMPUTE_LIMIT) COMPUTE_LIMIT else length(csv_files)
   shy_values = double(csv_cnt)  # a double-precision vector
   for (i in 1:csv_cnt) {
-    shy_values[i] = get_shy(csv_files[i])
+    shy_values[i] = get_shy(csv_files[i], cared_date)
   }
 
   id_list = gsub(".csv", "", gsub(csv_root, "", csv_files))[1:csv_cnt]
@@ -108,9 +125,61 @@ get_shy_suggestion <- function(more_info=FALSE)
   ordered_frame = shy_frame[order(shy_frame$shy, decreasing=TRUE),]
   indexed_frame = cbind(idx=1:csv_cnt, ordered_frame)  # add index column
 
-  print("推薦個股（依評比由高至低）如下：")
-  suggest_cnt = if (csv_cnt > SUGGEST_CNT) SUGGEST_CNT else csv_cnt
-  apply(indexed_frame[1:suggest_cnt,], 1, dump, more_info=more_info)  # '1' indicates rows
+  if (FALSE == silence)
+  {
+    print("推薦個股（依評比由高至低）如下：")
+    suggest_cnt = if (csv_cnt > SUGGEST_CNT) SUGGEST_CNT else csv_cnt
+    apply(indexed_frame[1:suggest_cnt,], 1, dump, more_info=more_info)  # '1' indicates rows
+  }
 
   return (ordered_frame)
+}
+
+library(ggplot2)
+
+show_yield_points <- function()
+{
+  COMPUTE_LIMIT = -1  # -1 means no limit
+  
+  csv_root = paste0(getwd(), '/', CSV_HOME)  # paste(..., sep='')
+  csv_files = Sys.glob(paste0(csv_root, "*.csv"))
+  csv_cnt = if (-1 != COMPUTE_LIMIT & length(csv_files) > COMPUTE_LIMIT) COMPUTE_LIMIT else length(csv_files)
+  mean_values = double(csv_cnt)
+  sd_values = double(csv_cnt)
+  for (i in 1:csv_cnt) {
+    yields = get_yields(csv_files[i])
+    mean_values[i] = mean(yields)
+    sd_values[i] = sd(yields)
+  }
+  
+  id_list = gsub(".csv", "", gsub(csv_root, "", csv_files))[1:csv_cnt]
+  yield_frame = data.frame(id=id_list, mean=mean_values, sd=sd_values)
+  sd_values[sd_values < 1] <- 1  # Note: in-place modification, for we do not expect a larger shy value by a less than 1 sd-yield
+  shy_values = mean_values / sd_values
+  max_shy = max(shy_values, na.rm=TRUE)
+  min_shy = min(shy_values, na.rm=TRUE)
+  # for shy distribution may be 'normal', and thus to have a more even 'red-green' proportion,
+  # we intend to larger the 'red range' by sqrt operation
+  red_values = sqrt((shy_values - min_shy) / (max_shy - min_shy))
+  green_values = 1 - (red_values)
+  colors = character(csv_cnt)
+  for (i in 1:csv_cnt)
+  {
+    is_na = is.na(red_values[i])
+    colors[i] = rgb(red=if (is_na) 1 else red_values[i],
+                    green=if (is_na) 1 else green_values[i], 
+                    blue=if (is_na) 1 else 0)
+  }
+  
+  p = ggplot(yield_frame, aes(x=mean, y=sd, label=id)) + 
+    ggtitle('SHY概念示意圖') + xlab('殖利率（平均值）') + ylab('殖利率（標準差）') +
+    theme(text=element_text(family='STKaiti')) + # to support Chinese characters
+    geom_text(size=3, hjust=0, nudge_x=0.02, color=colors, na.rm=TRUE) +
+    scale_x_continuous(trans='sqrt') +
+    scale_y_continuous(trans='log2') +
+    #scale_y_reverse() + # sd (y-axis) is shown reversed
+    geom_point(color=colors, na.rm=TRUE, size=0.5)
+  print(p)
+  
+  return (yield_frame)
 }
