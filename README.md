@@ -41,7 +41,7 @@ The result is then shown in your RStudio console:
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" width="515" height="411"></a>
 
 
-In case that the mutual performance between two targets is interested, we can put the two targets in the same evaluation:
+In case that the mutual performance between two targets is interested, we can put the two targets in same evaluation:
 ```r
     eval_pair_res = evaluate_shy_stock('2330')
 ```
@@ -66,9 +66,9 @@ Don't forget to try above yourself to see how the outcome is. :)
 
 Note: have 'DEBUG=1' to show more message during computation  
 
-# Visualize the data
+# Web Visualization
 
-Visualization is always a good idea for better comprehension. <a href='https://github.com/rstudio/shiny'>`Shiny`</a> is yet one perfect web visualization framework to help R programmer 'post' their work in less effort without downgraded outcome. A webpage on how SHY performs, under whole Taiwan Stock Market, can be found at:
+Visualization is always a good idea for better comprehension, especially when it is presented by a web page <a href='https://github.com/rstudio/shiny'>`Shiny`</a> is yet one perfect web visualization framework to help R programmer 'post' their work in less effort without downgraded outcome. A webpage on how SHY performs, under whole Taiwan Stock Market, can be found at:
 
 <a href='http://url_to_be_announced'>SHY: The 'SHarpe Yield' Strategy</a> // SHY strategy on the whole Taiwan Stock Market
 
