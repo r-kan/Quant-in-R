@@ -1,8 +1,8 @@
 # Quant-in-R
 simple financial applications &amp; analysis programs written in R language   
   
-<a href='http://url_to_be_announced'>ＳＨＹ</a>: SHY, the 'Sharpe Yield' strategy
-<a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a>: Simple demonstration for data visualization
+<a href='http://url_to_be_announced'>ＳＨＹ: The 'Sharpe Yield' Strategy</a>  
+<a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft: Simple demonstration for data visualization</a>
 
 # R, as a programming language
 The R programming language is designed for statistical analysis, and is widely used in many area recently. Here, I will focus on one of the most adopting domain, financial analysis, to demonstrate the strength of R.  Besides, I shall pay extra attention to data visualizaiton in R.  
@@ -60,7 +60,7 @@ Note: 'DEBUG=1' to show more message during computation
 
 Visualization is always a good idea for better comprehension. <a href='https://github.com/rstudio/shiny'>`Shiny`</a> is yet one perfect web visualization framework to help R programmer 'post' their work in less effort without downgraded outcome. A webpage on how SHY performs, under whole Taiwan Stock Market, can be found as follows:
 
-<a href='http://url_to_be_announced'>ＳＨＹ</a>: SHY, the 'Sharpe Yield' strategy
+<a href='http://url_to_be_announced'>ＳＨＹ: The 'Sharpe Yield' Strategy</a>
 
 There is also a page for simple data visualization, which you can open it locally as follows:
 ```r
@@ -70,7 +70,7 @@ There is also a page for simple data visualization, which you can open it locall
 ```
 
 Or visit it in the following:
-<a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a>: Simple demonstration for data visualization
+<a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft: Simple demonstration for data visualization</a>
 
 
 # More R programs
