@@ -1,7 +1,8 @@
 # Quant-in-R
 simple financial applications &amp; analysis programs written in R language   
   
-2016/10/10: A draft version of <a href='https://rkan.shinyapps.io/SHY_draft/'>SHY web interface</a> is presented
+<a href='http://url_to_be_announced'>ＳＨＹ</a>: SHY, the 'Sharpe Yield' strategy
+<a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a>: Simple demonstration for data visualization
 
 # R, as a programming language
 The R programming language is designed for statistical analysis, and is widely used in many area recently. Here, I will focus on one of the most adopting domain, financial analysis, to demonstrate the strength of R.  Besides, I shall pay extra attention to data visualizaiton in R.  
@@ -32,12 +33,12 @@ Then, it shows
 
 # How good (or bad) is SHY? 
 Would you like to believe a strategy is good when someone throws it to you and claims that it is? I hope not.  
-Here, `PerformanceAnalytics`, a powerful module in finance evaluation in R is adopted, to express the quality of SHY:
+Here, `PerformanceAnalytics`, a powerful module in finance evaluation in R is adopted, to express the quality of SHY:  
 ```r
     source("shy_eval.R")
     eval_res = evaluate_shy()
 ```
-The result is then shown in your RStudio console:
+The result is then shown in your RStudio console:  
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" width="515" height="411"></a>
 
 
@@ -57,23 +58,19 @@ Note: 'DEBUG=1' to show more message during computation
 
 # Visualize the data
 
-Visualization is always a good idea for better comprehension:
+Visualization is always a good idea for better comprehension. <a href='https://github.com/rstudio/shiny'>`Shiny`</a> is yet one perfect web visualization framework to help R programmer 'post' their work in less effort without downgraded outcome. A webpage on how SHY performs, under whole Taiwan Stock Market, can be found as follows:
+
+<a href='http://url_to_be_announced'>ＳＨＹ</a>: SHY, the 'Sharpe Yield' strategy
+
+There is also a page for simple data visualization, which you can open it locally as follows:
 ```r
-    source("stock_graph.R")
-    dump_multi_graph_on_yield(shy_list)
+    library(shiny)
+    setwd("SHY_draft")
+    runApp()
 ```
 
-Then we have `yield.png` in working directory:
-<a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/yield.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/yield.png" width="800" height="450"></a>
-
-We also can visualize the values in csv files as follows (`stock.png` will be genereated):
-```r
-    dump_graph("2330", "close")
-```
-
-<a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/stock.png" target="_blank"><img border="0" alt="close values of 2330" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/stock.png" width="800" height="450"></a>
-
-For web interface visualization, check <a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a> (powered by <a href='https://github.com/rstudio/shiny'>Shiny</a>).  
+Or visit it in the following:
+<a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a>: Simple demonstration for data visualization
 
 
 # More R programs
