@@ -62,13 +62,13 @@ If some stocks, instead of SHY are interested, we can do the following:
     evaluate_stock_pair_relative('2330', '2357')
 ```
 
-Don't forget to try above yourself to see how the outcome is. :)
+Don't forget to try above yourself to see how the result is. :)
 
 Note: have 'DEBUG=1' to show more message during computation  
 
 # Web Visualization
 
-Visualization is always a good idea for better comprehension, especially when it is presented by a web page. <a href='https://github.com/rstudio/shiny'>`Shiny`</a> is yet one perfect web visualization framework to help R programmer 'post' their work in less effort without downgraded outcome. A webpage on how SHY performs, under whole Taiwan Stock Market, can be found at:
+Visualization is always a good idea for better comprehension, especially when it is presented by a web page. <a href='https://github.com/rstudio/shiny'>`Shiny`</a> is yet one perfect web visualization framework to help R programmers 'post' their work in less effort without downgraded outcome. A webpage on how SHY performs, under the whole Taiwan Stock Market, can be found at:
 
 <a href='http://url_to_be_announced'>SHY: The 'SHarpe Yield' Strategy</a> // SHY strategy on the whole Taiwan Stock Market
 
