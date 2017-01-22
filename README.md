@@ -7,9 +7,8 @@ simple financial applications &amp; analysis programs written in R language
 The R programming language is designed for statistical analysis, and is widely used in many area recently. Here, I will focus on one of the most adopting domain, financial analysis, to demonstrate the strength of R.  Besides, I shall pay extra attention to data visualizaiton in R.  
 
 # The SHY 'SHarpe Yield' strategy
-The introduced investment strategy, SHY 'SHarpe Yield', has a very simple computation model. It evaluates each stock by the SHY value, simply **yield** represents in a **sharpe ratio** way, i.e., its **mean** divided by its **standard deviation**. Given a list of concerned stocks, it computes the SHY value, and reports the stocks from highest to lowest SHY value.  
+The introduced investment strategy, SHY 'SHarpe Yield', has a very simple computation model. It evaluates each stock by the SHY value, simply **yield** represents in a **sharpe ratio** way, i.e., its **mean** divided by its **standard deviation**. Given a list of concerned stocks in folder `csv/` (11 stock csv files reside), we compute the SHY value and report the stocks from highest to lowest SHY value as follows:  
 
-Here, we have 10 stocks in the folder `csv/`, and `shy.R` works as follows:  
 ```r
     source("shy.R")
     shy_list = get_shy_suggestion()
@@ -33,17 +32,17 @@ Then, it shows
 
 # How good (or bad) is SHY? 
 Would you like to believe a strategy is good when someone throws it to you and claims that it is? I hope not.  
-Here, I use `PerformanceAnalytics`, a powerful module in finance evaluation, to express the quality of SHY as follows:
+Here, `PerformanceAnalytics`, a powerful module in finance evaluation in R is adopted, to express the quality of SHY:
 ```r
     source("shy_eval.R")
     eval_res = evaluate_shy()
 ```
 
-The result is shown as the following graph in your RStudio console:
+The result is then shown in your RStudio console:
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" width="515" height="411"></a>
 
 
-In case that we are interested to the mutual performance between two targets, we can put the two targets in the same evaluation graph:
+In case that the mutual performance between two targets is interested, we can put the two targets in the same evaluation:
 ```r
     eval_pair_res = evaluate_shy_stock('2330')
 ```
@@ -77,9 +76,6 @@ We also can visualize the values in csv files as follows (`stock.png` will be ge
 
 For web interface visualization, check <a href='https://rkan.shinyapps.io/SHY_draft/'>SHY_draft</a> (powered by <a href='https://github.com/rstudio/shiny'>Shiny</a>).  
 
-# How good (or bad) is SHY? 
-Would you like to believe a strategy is good when someone throws it to you and claims that it is good? I hope not.  
-Next, I would like to present R programs, adopting `quatmod` and `PerformanceAnalytics` to show the quality of SHY, basically in terms of returns on investment. The result will also be compared with one of the most popular long-term investment target in Taiwan stock market, the 0050 ETF. I believe in this way using R, to think and evaluate financial decisions before adopting them, gives invaluable benefit.  
 
 # More R programs
 For future plan, I will present programs utilize some other R features:  
