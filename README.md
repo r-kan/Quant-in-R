@@ -1,5 +1,5 @@
 # Quant-in-R
-simple financial applications &amp; analysis programs written in R language   
+Simple financial applications &amp; analysis programs written in R language   
   
 <a href='http://url_to_be_announced'>SHY: The 'SHarpe Yield' Strategy</a>
 
@@ -62,9 +62,9 @@ If some stocks, instead of SHY are interested, we can do the following:
     evaluate_stock_pair_relative('2330', '2357')
 ```
 
-Don't forget to try above to see how the outcome will be. :)
+Don't forget to try above yourself to see how the outcome will be. :)
 
-Note: 'DEBUG=1' to show more message during computation  
+Note: have 'DEBUG=1' to show more message during computation  
 
 # Visualize the data
 
