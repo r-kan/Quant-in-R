@@ -18,8 +18,10 @@ shinyUI(fluidPage(
 
       selectInput("valueType",
         label = "選擇種類",
-        choices = c(get_name(close), get_name(volume),
-          get_name(yield)),
+        choices = c(get_name(close),
+                    get_name(volume),
+                    get_name(yield),
+                    get_name(adjclose)),
         selected = get_name(close)),
 
       actionButton("best3", label = "最佳ＳＨＹ"),
