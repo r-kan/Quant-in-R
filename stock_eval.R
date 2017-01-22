@@ -2,7 +2,7 @@
 
 source('eval_util.R')
 
-evaluate_stock <- function(id, update_progress)
+evaluate_stock <- function(id, update_progress=NULL)
 {
   dprint(paste0('[stock_eval] evaluate_stock with ', id))
   stopifnot(class(id) == 'character')

@@ -98,7 +98,7 @@ evaluate_shy <- function()
   return (cur_summary)
 }
 
-evaluate_shy_stock_relative <- function(stock_id, update_progress)
+evaluate_shy_stock_relative <- function(stock_id, update_progress=NULL)
 {
   dprint(paste0('[shy_eval] evaluate_shy_stock_relative with ', stock_id))
   evaluate_pair_relative(get_shy_position, "SHY",
@@ -106,7 +106,7 @@ evaluate_shy_stock_relative <- function(stock_id, update_progress)
                          get_shy_summary(), update_progress=update_progress)
 }
 
-evaluate_shy_stock <- function(stock_id, update_progress)
+evaluate_shy_stock <- function(stock_id, update_progress=NULL)
 {
   dprint(paste0('[shy_eval] evaluate_shy_stock with ', stock_id))
   return(evaluate_pair(get_shy_position, "SHY",
