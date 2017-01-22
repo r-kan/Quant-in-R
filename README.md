@@ -62,7 +62,7 @@ If some stocks, instead of SHY are interested, we can do the following:
     evaluate_stock_pair_relative('2330', '2357')
 ```
 
-Don't forget to try above yourself to see how the outcome will be. :)
+Don't forget to try above yourself to see how the outcome is. :)
 
 Note: have 'DEBUG=1' to show more message during computation  
 
