@@ -84,7 +84,7 @@ Or visit the online page:
 
 
 # More R programs
-For future plan, I will present programs utilize some other R features:  
+For future plan, I will present programs utilize some other R features in terms of financial analysis:  
 * Probability Distributions
 * Linear Least Square Regression
 * Confidence Intervals
