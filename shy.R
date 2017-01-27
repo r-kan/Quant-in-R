@@ -69,30 +69,28 @@ get_yields <- function(csv_file, cared_date=NA, data=data.frame())
   return (pruned_data[, YIELD])
 }
 
-get_shy <- function(csv_file, cared_date=NA, data=data.frame())
+get_shy_adjust_factor <- function(yields)
+{
+  return (sqrt(length(yields)))
+}
+
+get_shy_values <- function(csv_file, cared_date=NA, data=data.frame())
 {
   yields = get_yields(csv_file, cared_date, data)
   if ('logical' == class(yields)) {
     stopifnot(is.na(yields))
-    return (NA)
+    return (data.frame(shy=NA, adjust_factor=NA))
   }
   # we don't expect a higher shy value caused by a yield-sd lower than 1
   adopted_sd = if (sd(yields) > 1) sd(yields) else 1
   shy = mean(yields) / adopted_sd
-  return (shy)
+  return (data.frame(shy=shy, adjust_factor=get_shy_adjust_factor(yields)))
 }
 
-# Note:
-#   'other_stock_values' is no good name, however, may be acceptable if we only use
-#   it to retrieve 'two' other values (when more than three, then better have more explicit name)
-get_other_stock_values <- function(id)
+get_shy <- function(csv_file, cared_date=NA, data=data.frame())
 {
-  csv_data = get_csv_data(get_csv_file(id))
-  pruned_data = get_pruned_data_by_yield(csv_data)
-  
-  valid_yield_cnt = nrow(pruned_data)
-  last_close = pruned_data[1, CLOSE]
-  return (c(valid_yield_cnt, last_close))
+  shy_values = get_shy_values(csv_file, cared_date, data)
+  return (shy_values$shy)
 }
 
 dump <- function(row_values, more_info)
@@ -101,8 +99,7 @@ dump <- function(row_values, more_info)
   id = row_values[2]
   dump_str = c("(", idx, ") 個股：", id, ", ＳＨＹ：", row_values[3])
   if (more_info) {
-    stock_values = get_other_stock_values(id)
-    more_dump_str = c(", 天數：", stock_values[1], ", 收盤價：", stock_values[2])
+    more_dump_str = c(", 調整值：", row_values[4])
     dump_str = c(dump_str, more_dump_str)
   }
   print(paste(dump_str, collapse=''))
@@ -111,23 +108,24 @@ dump <- function(row_values, more_info)
 get_shy_suggestion <- function(cared_date=NA, more_info=FALSE, silence=FALSE)
 {
   COMPUTE_LIMIT = -1  # -1 means no limit
-  
-  csv_root = paste0(getwd(), '/', CSV_HOME)  # paste(..., sep='')
+  csv_root = paste0(getwd(), '/', CSV_HOME, '/')  # paste(..., sep='')
   csv_files = Sys.glob(paste0(csv_root, "*.csv"))
   csv_cnt = if (-1 != COMPUTE_LIMIT & length(csv_files) > COMPUTE_LIMIT) COMPUTE_LIMIT else length(csv_files)
-  shy_values = double(csv_cnt)  # a double-precision vector
+  shy_values = data.frame(matrix(nrow=csv_cnt, ncol=2))  # 2 for 'shy', 'adjust_factor'
+  colnames(shy_values) = c('shy', 'adjust_factor')
   for (i in 1:csv_cnt) {
-    shy_values[i] = get_shy(csv_files[i], cared_date)
+    ret_values = get_shy_values(csv_files[i], cared_date)
+    shy_values$shy[i] = ret_values$shy
+    shy_values$adjust_factor[i] = ret_values$adjust_factor
   }
-
   id_list = gsub(".csv", "", gsub(csv_root, "", csv_files))[1:csv_cnt]
-  shy_frame = data.frame(id=id_list, shy=shy_values)
-  ordered_frame = shy_frame[order(shy_frame$shy, decreasing=TRUE),]
+  shy_frame = data.frame(id=id_list, shy=shy_values$shy, adjust_factor=shy_values$adjust_factor)
+  ordered_frame = shy_frame[order(shy_frame$shy * shy_frame$adjust_factor, decreasing=TRUE),]
   indexed_frame = cbind(idx=1:csv_cnt, ordered_frame)  # add index column
 
   if (FALSE == silence)
   {
-    print("推薦個股（依評比由高至低）如下：")
+    #print("推薦個股（依評比由高至低）如下：")
     suggest_cnt = if (csv_cnt > SUGGEST_CNT) SUGGEST_CNT else csv_cnt
     apply(indexed_frame[1:suggest_cnt,], 1, dump, more_info=more_info)  # '1' indicates rows
   }

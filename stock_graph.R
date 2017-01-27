@@ -28,6 +28,8 @@ dump_graph <- function(id, value_type=YIELD)
   dev.off() 
 }
 
+library(ggplot2)
+
 show_close_and_adjclose <- function(id)
 {
   dprint('[stock_graph] show_close_and_adjclose')
@@ -36,7 +38,7 @@ show_close_and_adjclose <- function(id)
   min_price = min(csv_data[, CLOSE], na.rm=TRUE)
   max_price = max(csv_data[, ADJCLOSE], na.rm=TRUE)
 
-  price_frame = data.frame(date=as.Date(sapply(csv_data[nrow(csv_data):1, DATE], to_date)),
+  price_frame = data.frame(date=as.Date(sapply(csv_data[nrow(csv_data):1, DATE], to_date), origin='1970-01-01'),
                            close=csv_data[nrow(csv_data):1, CLOSE],
                            adjclose=csv_data[nrow(csv_data):1, ADJCLOSE])
   p = ggplot(price_frame, aes(x=date, y=c(close))) + 

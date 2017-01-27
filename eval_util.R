@@ -188,7 +188,7 @@ get_evaluate_summary <- function(get_position_func, update_progress=NULL)
   end_date = as.integer(colnames(positions[[length(positions)]]))  # find out if we can use '-1' to retrieve last element
   summary = get_initial_summary(start_date, end_date)
 
-  if (!is.null(update_progress)) { update_progress(0.4, '寫入資料') }
+  if (!is.null(update_progress)) { update_progress(0.4, '累加資料') }
   # for each stock_id, fill in its 'contribution' to data pool
   for (stock_id in get_stocks_from_hash()) {
     pos_dates = get_stock_pos_date(stock_id)
@@ -238,10 +238,10 @@ evaluate_pair_relative <- function(get_position_func1, title1, get_position_func
   if (!is.null(update_progress)) { update_progress(0, paste0('計算', title1)) }
   ret1 = get_return(get_position_func1, title1, in_summary1)
 
-  if (!is.null(update_progress)) { update_progress(0.1, paste0('計算', title2)) }
+  if (!is.null(update_progress)) { update_progress(0.01, paste0('計算', title2)) }
   ret2 = get_return(get_position_func2, title2, in_summary2)
 
-  if (!is.null(update_progress)) { update_progress(0.7, '繪製「相對報酬」圖') }
+  if (!is.null(update_progress)) { update_progress(0.6, '繪製「相對報酬」圖') }
   # Note: we've tried, but failed to find the 'PerformanceAnalytics' charts support Chinese
   chart.RelativePerformance(ret1, ret2, main=paste("Relative Performance:", title1, "to", title2))
 
@@ -254,7 +254,7 @@ evaluate_pair <- function(get_position_func1, title1, get_position_func2, title2
   if (!is.null(update_progress)) { update_progress(0, paste0('計算', title1)) }
   ret1 = get_return(get_position_func1, title1, in_summary1)
 
-  if (!is.null(update_progress)) { update_progress(0.1, paste0('計算', title2)) }
+  if (!is.null(update_progress)) { update_progress(0.01, paste0('計算', title2)) }
   ret2 = get_return(get_position_func2, title2, in_summary2)
 
   if (!is.null(update_progress)) { update_progress(0.4, '繪製「報酬總結」圖') }
@@ -264,7 +264,7 @@ evaluate_pair <- function(get_position_func1, title1, get_position_func2, title2
   table.DownsideRisk(ret_combine)
   charts.PerformanceSummary(ret_combine)
 
-  if (!is.null(update_progress)) { update_progress(0.6, '計算報酬相關數據') }
+  if (!is.null(update_progress)) { update_progress(0.7, '計算報酬相關數據') }
   cumu_returns = Return.cumulative(ret_combine)
   annual_returns = Return.annualized(ret_combine)
   
