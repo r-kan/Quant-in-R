@@ -39,7 +39,7 @@ Here, `PerformanceAnalytics`, a powerful module in finance evaluation in R is ad
     eval_res = evaluate_shy()
 ```
 The result is then shown in your RStudio console:  
-(Note: here we buy three stocks based on SHY values periodically, among the 11 candidates)  
+(Note: here we buy 3 stocks based on SHY values periodically, among the 11 candidates)  
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" width="515" height="411"></a>
 
 
