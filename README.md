@@ -29,6 +29,8 @@ Then, it shows
 [1] "(11) 個股：2408, ＳＨＹ：NA"
 ```
 
+Based on the computed SHY value, we can form a strategy that selects stocks with better SHY, for example, buy a bunch of stocks with better SHY value periodically, just as the way as ETF (Exchange Traded Funds) does.
+
 # How good (or bad) is SHY? 
 Would you like to believe a strategy is good when someone throws it to you and claims that it is? I hope not.  
 Here, `PerformanceAnalytics`, a powerful module in finance evaluation in R is adopted, to express the quality of SHY:  
@@ -37,6 +39,7 @@ Here, `PerformanceAnalytics`, a powerful module in finance evaluation in R is ad
     eval_res = evaluate_shy()
 ```
 The result is then shown in your RStudio console:  
+(Note: here we buy three stocks based on SHY values periodically, among the 11 candidates)  
 <a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_perf.png" width="515" height="411"></a>
 
 
