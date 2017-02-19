@@ -42,15 +42,16 @@ show_close_and_adjclose <- function(id)
                            close=csv_data[nrow(csv_data):1, CLOSE],
                            adjclose=csv_data[nrow(csv_data):1, ADJCLOSE])
   p = ggplot(price_frame, aes(x=date, y=c(close))) + 
-    ggtitle(paste0(id, '還原權值股價圖')) + 
-    geom_line(aes(y=adjclose, colour='還原權值價格')) +
-    geom_line(aes(y=close, colour='收盤價')) +
+    ggtitle(paste0(id, if (ENG == LANG) ' Adjusted Close' else '還原權值股價圖')) +
+    geom_line(aes(y=adjclose, colour=if (ENG == LANG) 'adjusted close' else '還原權值價格')) +
+    geom_line(aes(y=close, colour=if (ENG == LANG) 'close' else '收盤價')) +
     theme(legend.justification=c(0,1), legend.position=c(.03, .97), legend.title=element_text(size=0)) +
-    xlab(get_name(DATE)) + ylab('價格') +
+    xlab(if (ENG == LANG) 'date' else get_name(DATE)) + ylab(if (ENG == LANG) 'price' else '價格') +
     theme(text=element_text(family='STKaiti')) # to support Chinese characters
   print(p)
+}
 
-  # the following is 'plot' version
+  # the following is 'plot' version for 'show_close_and_adjclose'
   "par(mar=c(4,4,2,2)+0.1) # bottom, left, top, and right (default: 4.1)
   par(family='STKaiti') # to support Chinese characters
   plot(as.Date(sapply(csv_data[nrow(csv_data):1, DATE], to_date)),
@@ -67,7 +68,6 @@ show_close_and_adjclose <- function(id)
          horiz=FALSE, lty=c(1,1), lwd=c(2,2),
          col=c('lightblue', 'blue'),
          bg='grey96')"
-}
 
 show_multi_graph_on_yield <- function(id_list)
 {

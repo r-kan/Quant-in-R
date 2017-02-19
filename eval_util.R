@@ -170,7 +170,7 @@ get_evaluate_summary <- function(get_position_func, update_progress=NULL)
   positions = get_positions(get_position_func)
   clear_stock_pos_hash()  # reset global data
 
-  if (!is.null(update_progress)) { update_progress(0.0, '轉換為個股導向資料') }
+  if (!is.null(update_progress)) { update_progress(0.0, if (ENG == LANG) 'transfer to stock-oriented data' else '轉換為個股導向資料') }
   # convert to 'stock major' entries from input 'date major' entries (to reduce csv file access)
   for (i in 1:length(positions)) 
   {
@@ -182,20 +182,20 @@ get_evaluate_summary <- function(get_position_func, update_progress=NULL)
     }
   }
 
-  if (!is.null(update_progress)) { update_progress(0.2, '初始化資料') }
+  if (!is.null(update_progress)) { update_progress(0.2, if (ENG == LANG) 'initialize data' else '初始化資料') }
   # prepare summary data pool
   start_date = as.integer(colnames(positions[[1]]))
   end_date = as.integer(colnames(positions[[length(positions)]]))  # find out if we can use '-1' to retrieve last element
   summary = get_initial_summary(start_date, end_date)
 
-  if (!is.null(update_progress)) { update_progress(0.4, '累加資料') }
+  if (!is.null(update_progress)) { update_progress(0.4, if (ENG == LANG) 'iterate data' else '累加資料') }
   # for each stock_id, fill in its 'contribution' to data pool
   for (stock_id in get_stocks_from_hash()) {
     pos_dates = get_stock_pos_date(stock_id)
     summary = add_summary(summary, stock_id, pos_dates)
   }
 
-  if (!is.null(update_progress)) { update_progress(0.6, '總結資料') }
+  if (!is.null(update_progress)) { update_progress(0.6, if (ENG == LANG) 'summarize data' else '總結資料') }
   for (i in 1:nrow(summary)) {
     if (summary$pos_cnt[i] > 0) {
       summary$ret_avg[i] = summary$ret_cumu[i] / summary$pos_cnt[i]
@@ -235,13 +235,13 @@ evaluate <- function(get_position_func, title, in_summary=NA, update_progress=NU
 evaluate_pair_relative <- function(get_position_func1, title1, get_position_func2, title2, 
                                    in_summary1=NA, in_summary2=NA, update_progress=NULL)
 {
-  if (!is.null(update_progress)) { update_progress(0, paste0('計算', title1)) }
+  if (!is.null(update_progress)) { update_progress(0, paste0(if (ENG == LANG) 'compute ' else '計算', title1)) }
   ret1 = get_return(get_position_func1, title1, in_summary1)
 
-  if (!is.null(update_progress)) { update_progress(0.01, paste0('計算', title2)) }
+  if (!is.null(update_progress)) { update_progress(0.01, paste0(if (ENG == LANG) 'compute ' else '計算', title2)) }
   ret2 = get_return(get_position_func2, title2, in_summary2)
 
-  if (!is.null(update_progress)) { update_progress(0.6, '繪製「相對報酬」圖') }
+  if (!is.null(update_progress)) { update_progress(0.6, if (ENG == LANG) 'draw relative graph' else '繪製「相對報酬」圖') }
   # Note: we've tried, but failed to find the 'PerformanceAnalytics' charts support Chinese
   chart.RelativePerformance(ret1, ret2, main=paste("Relative Performance:", title1, "to", title2))
 
@@ -251,20 +251,20 @@ evaluate_pair_relative <- function(get_position_func1, title1, get_position_func
 evaluate_pair <- function(get_position_func1, title1, get_position_func2, title2, 
                           in_summary1=NA, in_summary2=NA, update_progress=NULL)
 {
-  if (!is.null(update_progress)) { update_progress(0, paste0('計算', title1)) }
+  if (!is.null(update_progress)) { update_progress(0, paste0(if (ENG == LANG) 'compute ' else '計算', title1)) }
   ret1 = get_return(get_position_func1, title1, in_summary1)
 
-  if (!is.null(update_progress)) { update_progress(0.01, paste0('計算', title2)) }
+  if (!is.null(update_progress)) { update_progress(0.01, paste0(if (ENG == LANG) 'compute ' else '計算', title2)) }
   ret2 = get_return(get_position_func2, title2, in_summary2)
 
-  if (!is.null(update_progress)) { update_progress(0.4, '繪製「報酬總結」圖') }
+  if (!is.null(update_progress)) { update_progress(0.4, if (ENG == LANG) 'draw summary graph' else '繪製「報酬總結」圖') }
   ret_combine = cbind(ret1, ret2)
   colnames(ret_combine) = c(title1, title2)
   table.Drawdowns(ret_combine, top=10)
   table.DownsideRisk(ret_combine)
   charts.PerformanceSummary(ret_combine)
 
-  if (!is.null(update_progress)) { update_progress(0.7, '計算報酬相關數據') }
+  if (!is.null(update_progress)) { update_progress(0.7, if (ENG == LANG) 'compute statistics' else '計算報酬相關數據') }
   cumu_returns = Return.cumulative(ret_combine)
   annual_returns = Return.annualized(ret_combine)
   
@@ -290,7 +290,7 @@ evaluate_pair <- function(get_position_func1, title1, get_position_func2, title2
   start_month = index(ret_combine)[first_valid_entry2 - 1]
   start_month2 = paste0(format(start_month, '%Y'), '年', months(start_month))
 
-  if (!is.null(update_progress)) { update_progress(0.8, '傳回結果') }
+  if (!is.null(update_progress)) { update_progress(0.8, if (ENG == LANG) 'return results' else '傳回結果') }
   return (data.frame(cumu_ret=c(cumu_returns1, cumu_returns2),
                      annual_ret=c(annual_returns1, annual_returns2),
                      start_month=c(start_month1, start_month2),
