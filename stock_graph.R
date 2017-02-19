@@ -46,7 +46,7 @@ show_close_and_adjclose <- function(id)
     geom_line(aes(y=adjclose, colour=if (ENG == LANG) 'adjusted close' else '還原權值價格')) +
     geom_line(aes(y=close, colour=if (ENG == LANG) 'close' else '收盤價')) +
     theme(legend.justification=c(0,1), legend.position=c(.03, .97), legend.title=element_text(size=0)) +
-    xlab(if (ENG == LANG) 'date' else get_name(DATE)) + ylab(if (ENG == LANG) 'price' else '價格') +
+    xlab(if (ENG == LANG) 'Date' else get_name(DATE)) + ylab(if (ENG == LANG) 'Price' else '價格') +
     theme(text=element_text(family='STKaiti')) # to support Chinese characters
   print(p)
 }

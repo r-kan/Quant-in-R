@@ -170,9 +170,9 @@ show_yield_points <- function()
   }
   
   p = ggplot(yield_frame, aes(x=mean, y=sd, label=id)) + 
-    ggtitle(if (ENG == LANG) 'SHY Concept' else 'SHY概念示意圖') +
-            xlab(if (ENG == LANG) 'yield (AVG)' else '殖利率（平均值）') +
-            ylab(if (ENG == LANG) 'yield (STDEV)' else '殖利率（標準差）') +
+    ggtitle(if (ENG == LANG) 'Concept of SHY' else 'SHY概念示意圖') +
+            xlab(if (ENG == LANG) 'Yield (AVG)' else '殖利率（平均值）') +
+            ylab(if (ENG == LANG) 'Yield (STDEV)' else '殖利率（標準差）') +
     theme(text=element_text(family='STKaiti')) + # to support Chinese characters
     geom_text(size=3, hjust=0, nudge_x=0.02, color=colors, na.rm=TRUE) +
     scale_x_continuous(trans='sqrt') +

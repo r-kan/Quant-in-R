@@ -288,7 +288,9 @@ evaluate_pair <- function(get_position_func1, title1, get_position_func2, title2
   ldd_from_date2 = as.character(index(ret_combine)[dd2$from[ldd_entry2] + first_valid_entry2 - 1])
   ldd_to_date2 = as.character(index(ret_combine)[dd2$to[ldd_entry2] + first_valid_entry2 - 1])
   start_month = index(ret_combine)[first_valid_entry2 - 1]
-  start_month2 = paste0(format(start_month, '%Y'), '年', months(start_month))
+  start_month2 = paste0(format(start_month, '%Y'),
+    if (ENG == LANG) '' else '年',
+    if (ENG == LANG) paste0('/', format(start_month, '%m')) else months(start_month))
 
   if (!is.null(update_progress)) { update_progress(0.8, if (ENG == LANG) 'return results' else '傳回結果') }
   return (data.frame(cumu_ret=c(cumu_returns1, cumu_returns2),
