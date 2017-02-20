@@ -70,7 +70,7 @@ Note: have 'DEBUG=1' to show more message during computation
 
 # Web Visualization
 
-Visualization is always a good idea for better comprehension, especially when it is presented by a web page. <a href='https://github.com/rstudio/shiny'>`Shiny`</a> is yet one perfect web visualization framework to help R programmers present their work as a web page, in less effort without downgraded outcome. A webpage on how SHY performs, under the whole Taiwan Stock Market, can be found at:
+Visualization is always a good idea for better comprehension, especially when it is presented by a web page. <a href='https://github.com/rstudio/shiny'>`Shiny`</a> is yet one perfect web visualization framework to help R programmers present their work as a web page, in less effort without downgraded outcome. A page on how SHY performs, under the whole Taiwan Stock Market, can be found at:
 
 <a href='https://rkan.shinyapps.io/SHYE/'>SHY: The 'SHarpe Yield' Strategy</a> // SHY strategy on the whole Taiwan Stock Market
 
