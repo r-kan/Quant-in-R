@@ -45,6 +45,12 @@ get_market_dates <- function(start_date)
   return (rev(cvt_dates))  # reverse to 'oldest to newest' for adopted package (zoo, xts) expects such fashsion
 }
 
+get_newest_market_dates <- function()
+{
+  newest_date = tail(get_market_dates(START_EVAL_DATE), n=1)
+  return (gsub('-', '/', as.Date(newest_date[[1]])))
+}
+
 # TODO: the 'StockPosDate' related function shall be better to be placed in a class
 
 # The StockPosDate functionality --- begin
