@@ -105,11 +105,13 @@ dump <- function(row_values, more_info)
   print(paste(dump_str, collapse=''))
 }
 
-get_shy_suggestion <- function(cared_date=NA, more_info=FALSE, silence=FALSE)
+get_shy_suggestion <- function(cared_date=NA, more_info=FALSE, silence=FALSE, in_csv_files=NA)
 {
   COMPUTE_LIMIT = -1  # -1 means no limit
-  csv_root = paste0(getwd(), '/', CSV_HOME, '/')  # paste(..., sep='')
-  csv_files = Sys.glob(paste0(csv_root, "*.csv"))
+  csv_root = paste0(getwd(), '/', CSV_HOME)  # paste(..., sep='')
+  csv_files = if (class(in_csv_files) == 'logical' && is.na(in_csv_files))
+    Sys.glob(paste0(csv_root, "*.csv")) else in_csv_files
+
   csv_cnt = if (-1 != COMPUTE_LIMIT & length(csv_files) > COMPUTE_LIMIT) COMPUTE_LIMIT else length(csv_files)
   shy_values = data.frame(matrix(nrow=csv_cnt, ncol=2))  # 2 for 'shy', 'adjust_factor'
   colnames(shy_values) = c('shy', 'adjust_factor')

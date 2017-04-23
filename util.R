@@ -8,6 +8,7 @@ source("value_type.R")
 if (!exists("DEBUG", mode="numeric"))
   DEBUG = 0
 
+FINISH_EVAL_DATE = Sys.Date() # that means 'today'
 MAX_YIELD_BOUND = 99999
 SUGGEST_CNT = 30
 
@@ -105,6 +106,11 @@ get_csv_data <- function(csv_file, cared_date=NA, cared_value=c(YIELD, DATE, CLO
       return (NA)
     }
     stock_values = stock_values[cared_idx:nrow(stock_values),]
+  }
+  if (Sys.Date() != FINISH_EVAL_DATE) {  # Note: Sys.Date() = today
+    #stopifnot(FALSE)
+    cared_idx = get_cared_index(as.vector(stock_values$date), FINISH_EVAL_DATE)
+    stock_values = if (is.na(cared_idx)) stock_values else stock_values[cared_idx:nrow(stock_values),]
   }
   if (FALSE == is.na(cared_date_start)) {
     cared_idx = get_cared_index(as.vector(stock_values$date), cared_date_start)
