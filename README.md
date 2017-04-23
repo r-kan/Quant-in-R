@@ -7,7 +7,7 @@ Simple financial applications &amp; analysis programs written in R language
 The R programming language is designed for statistical analysis, and is widely used in many area recently. Here, I will focus on one of the most adopting domain, financial analysis, to demonstrate the strength of R.  Besides, I shall pay extra attention to data visualizaiton in R.  
 
 # The SHY 'SHarpe Yield' strategy
-The introduced investment strategy, SHY 'SHarpe Yield', has a very simple computation model. It evaluates each stock by the SHY value, simply **yield** represents in a **sharpe ratio** way, i.e., its **mean** divided by its **standard deviation**. Given a list of sample stocks in folder `csv/` (11 stock csv files reside), we can compute the SHY values and report the SHY value as follows:  
+The introduced investment strategy, SHY 'SHarpe Yield', has a very simple computation model. It evaluates each stock by the SHY value, simply **yield** represents in a **sharpe ratio** way, i.e., its **mean** divided by its **standard deviation**. Given a list of sample stocks in folder `csv/` (a dozen stock csv files reside), we can compute the SHY values and report the SHY value as follows:  
 
 ```r
     source("shy.R")
@@ -16,17 +16,19 @@ The introduced investment strategy, SHY 'SHarpe Yield', has a very simple comput
 
 Then, it shows
 ```
-[1] "( 1) 個股：2382, ＳＨＹ：3.492369"
-[1] "( 2) 個股：2912, ＳＨＹ：3.453791"
-[1] "( 3) 個股：1101, ＳＨＹ：3.043907"
-[1] "( 4) 個股：2207, ＳＨＹ：2.488453"
-[1] "( 5) 個股：2330, ＳＨＹ：2.483946"
-[1] "( 6) 個股：2801, ＳＨＹ：3.261258"
-[1] "( 7) 個股：2357, ＳＨＹ：2.090429"
-[1] "( 8) 個股：2325, ＳＨＹ：2.354444"
-[1] "( 9) 個股：2354, ＳＨＹ：1.791885"
-[1] "(10) 個股：0050, ＳＨＹ：NA"
-[1] "(11) 個股：2408, ＳＨＹ：NA"
+[1] "( 1) 個股：2382, ＳＨＹ：3.529709"
+[1] "( 2) 個股：2912, ＳＨＹ：3.470507"
+[1] "( 3) 個股：1101, ＳＨＹ：3.037783"
+[1] "( 4) 個股：2330, ＳＨＹ：2.506207"
+[1] "( 5) 個股：2207, ＳＨＹ：2.486131"
+[1] "( 6) 個股：2801, ＳＨＹ：3.330069"
+[1] "( 7) 個股：2701, ＳＨＹ：3.978262"
+[1] "( 8) 個股：2357, ＳＨＹ：2.116582"
+[1] "( 9) 個股：2325, ＳＨＹ：2.385228"
+[1] "(10) 個股：1434, ＳＨＹ：3.511784"
+[1] "(11) 個股：2354, ＳＨＹ：1.811173"
+[1] "(12) 個股：0050, ＳＨＹ：NA"
+[1] "(13) 個股：2408, ＳＨＹ：NA"
 ```
 
 Based on the computed SHY value, we can form a strategy that selects stocks with better SHY, for example, buy a bunch of stocks with better SHY value periodically, just as the way as ETF (Exchange Traded Funds) does.
