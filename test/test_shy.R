@@ -34,6 +34,6 @@ test_that("shy evaluation",{
 
   assign('EVAL_PERIOD_LEN', 2463, envir = .GlobalEnv)
   # evalution under some small amount of positions
-  res = evaluate(id_list_closure(as.vector(pos$id)), 'test_shy_eval')
+  res = evaluate(id_list_closure(as.vector(pos$id)), 'test_shy_eval')  # note: we don't direct test 'evaluate_shy'
   expect_true(is_small_difference(sum(res$ret_cumu), 2.267973))
 })

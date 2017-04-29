@@ -2,5 +2,5 @@
 
 library(testthat)
 
-test_results <- test_dir('.', reporter="summary")
+test_results <- test_dir('test', reporter='summary')
 #print(test_results)

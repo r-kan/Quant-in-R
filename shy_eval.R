@@ -88,6 +88,10 @@ get_shy_summary <- function() { return (if (has_shy_summary()) read.csv(SHY_SUMM
 evaluate_shy <- function()
 {
   print('[shy_eval] evaluate_shy')
+
+  # this is not very good, but here, the value of FINISH_EVAL_DATE shall not be affected by any env. setting
+  assign('FINISH_EVAL_DATE', Sys.Date(), envir = .GlobalEnv)
+
   # Note: the saved shy summary does not aware any evaluation setting, e.g., START_EVAL_DATE, EVAL_PERIOD_LEN
   cur_summary = evaluate(get_shy_position, "SHY", get_shy_summary())
   if (CACHE_SHY_SUMMARY && FALSE == has_shy_summary()) {  # we currently only save shy summary when calls 'evaluate_shy'

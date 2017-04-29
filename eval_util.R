@@ -37,7 +37,7 @@ get_market_dates <- function(start_date)
   {
     iter_date = to_date(date_values[i])
     if (unclass(FINISH_EVAL_DATE) < iter_date) {
-      #stopifnot(FALSE)
+      stopifnot(FALSE)
       next
     }
     if (unclass(start_date) > iter_date) {  # we expect the date_values is from newest to oldest
