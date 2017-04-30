@@ -101,51 +101,48 @@ get_initial_summary <- function(start_date, end_date)
   return (data.frame(date=sapply(dates, unclass), pos_cnt=0, ret_cumu=0, ret_avg=0))
 }
 
-add_summary <- function(summary_pool, stock_id, pos_dates)
+add_summary <- function(res_pool, stock_id, buy_dates)
 {
-  msg = c('標的：', stock_id, '=> 日期：', sapply(pos_dates, function(x){as.character.Date(as.Date(x))}))
-  dprint(paste(msg, collapse = ' '))
-  start_pos_date = as.Date(pos_dates[[1]])
-  csv_data = get_csv_data(get_csv_file(stock_id), cared_date_start=start_pos_date, cared_value=c(DATE, CLOSE, ADJCLOSE))
+  dprint(paste(c('標的：', stock_id, '=> 日期：', sapply(buy_dates, function(x){as.character.Date(as.Date(x))})), collapse = ' '))
+  csv_data = get_csv_data(get_csv_file(stock_id), cared_date_start=as.Date(buy_dates[[1]]),
+                          cared_value=c(DATE, CLOSE, ADJCLOSE))
   zoo_data = zoo(csv_data[,ADJCLOSE], sapply(csv_data$date, to_date))  # zoo transfers to 'old->new' format, which ROC need
   roc = ROC(zoo_data, type='discrete')
-  abnomal_roc_idx = which(sapply(roc,function(x){(is.na(x) | x>0.10 | x< -0.10)}))
+  abnomal_roc_idx = which(sapply(roc, function(x){(is.na(x) | x>0.10 | x< -0.10)}))
+  abnomal_roc_idx = abnomal_roc_idx[! abnomal_roc_idx %in% 1] # the 1st entry is always NA for ROC, needless consider it
   if (length(abnomal_roc_idx) > 0) {
     for (i in 1:length(abnomal_roc_idx)) {
       idx = abnomal_roc_idx[i]
-      if (1 != idx) {  # the 1st entry is always NA for ROC, needless to report it
-        dprint(paste0("忽略ROC=", round(roc[idx], 2), ", 於", as.Date(index(zoo_data)[idx])))
-      }
+      dprint(paste0("忽略ROC=", round(roc[idx], 2), ", 於", as.Date(index(zoo_data)[idx])))
       roc[idx] = 0
     }
   }
-  curr_valid_pos_idx = length(pos_dates)
-  curr_summary_idx = nrow(summary_pool)
-  next_outpos_date_value = unclass(as.Date(pos_dates[[curr_valid_pos_idx]]))
-  for (i in length(zoo_data):1) 
-  {
-    # i=1: strategy decision done, i=2: place position in market => only has returns for '>2'
-    if (i <= 2) { break }
-    
-    if (index(zoo_data)[i - 2] < next_outpos_date_value) {  # Note: zoo keeps unclass Date value as index
-      curr_valid_pos_idx = curr_valid_pos_idx - 1
-      next_outpos_date_value = unclass(as.Date(pos_dates[[curr_valid_pos_idx]]))
-    }
-    if (curr_valid_pos_idx < 1) { break }
 
-    while (summary_pool$date[curr_summary_idx] != index(zoo_data)[i]) {
-      curr_summary_idx = curr_summary_idx - 1
-      stopifnot(curr_summary_idx > 0)
+  buy_idx = length(buy_dates)
+  res_idx = nrow(res_pool)
+  buy_date_value = unclass(as.Date(buy_dates[[buy_idx]]))
+
+  for (i in length(zoo_data):3) # i=1: buy decision, i=2: place position => only has returns for '>2'
+  { # from newest to oldest
+    if (index(zoo_data)[i - 2] < buy_date_value)
+    { # Note: 1. zoo keeps unclass Date value as index, 2. as above comment says, there's offset '2' between 'buy' and 'return'
+      buy_idx = buy_idx - 1
+      if (buy_idx < 1) { break }
+      buy_date_value = unclass(as.Date(buy_dates[[buy_idx]]))
     }
-    # 1. increment pos_cnt
-    # 2. add ROC (rate of change) <= may have subtle undesirable effect? we might deal with it later
-    new_pos_cnt = summary_pool$pos_cnt[curr_summary_idx] + curr_valid_pos_idx
-    summary_pool$pos_cnt[curr_summary_idx] = new_pos_cnt
-    new_ret_cumu = summary_pool$ret_cumu[curr_summary_idx] + (curr_valid_pos_idx * roc[i])
-    summary_pool$ret_cumu[curr_summary_idx] = new_ret_cumu
+
+    while (res_pool$date[res_idx] != index(zoo_data)[i]) { # stock value (zoo_data) might be loss in certain market dates
+      res_idx = res_idx - 1
+      stopifnot(res_idx > 0)
+    }
+
+    # 1. increment pos_cnt (by buy_idx = cumu. positions of stock_id)
+    # 2. add ROC (rate of change) as return in percentage
+    res_pool$pos_cnt[res_idx] = res_pool$pos_cnt[res_idx] + buy_idx
+    res_pool$ret_cumu[res_idx] = res_pool$ret_cumu[res_idx] + (buy_idx * roc[i])
   }
   
-  return (summary_pool)
+  return (res_pool)
 }
 
 get_positions <- function(get_position_func)
@@ -201,8 +198,8 @@ get_evaluate_summary <- function(get_position_func, update_progress=NULL)
   if (!is.null(update_progress)) { update_progress(0.4, if (ENG == LANG) 'iterate data' else '累加資料') }
   # for each stock_id, fill in its 'contribution' to data pool
   for (stock_id in get_stocks_from_hash()) {
-    pos_dates = get_stock_pos_date(stock_id)
-    summary = add_summary(summary, stock_id, pos_dates)
+    buy_dates = get_stock_pos_date(stock_id)
+    summary = add_summary(summary, stock_id, buy_dates)
   }
 
   if (!is.null(update_progress)) { update_progress(0.6, if (ENG == LANG) 'summarize data' else '總結資料') }
