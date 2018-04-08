@@ -54,9 +54,9 @@ In case that the performance comparison between two targets is interested, we ca
 
 Another way to compare performance is to use a relative performance view:
 ```r
-    eval_rel_res = evaluate_shy_stock_relative('2330')
+    eval_rel_res = evaluate_shy_stock_relative('2357')
 ```
-<a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_2330_perf_rel.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_2330_perf_rel.png" width="515" height="411"></a>
+<a href="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_2357_perf_rel.png" target="_blank"><img border="0" alt="show multiple yield values" src="https://raw.githubusercontent.com/r-kan/r-kan.github.io/master/images/Quant-in-R/shy_2357_perf_rel.png" width="515" height="411"></a>
 
 If some stocks, instead of SHY are interested, we can do the following:
 ```r
