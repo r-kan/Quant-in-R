@@ -11,3 +11,9 @@ ADOPTED_SHY_POSITION_CNT = 3
 
 # eval_util.R
 EVAL_PERIOD_LEN = 1800
+
+# general
+ENG = 1
+CHT = 2
+LANG = ENG
+LANG = CHT
